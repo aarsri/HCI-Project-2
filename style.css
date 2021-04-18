@@ -1,0 +1,176 @@
+body {
+    background-color:grey;
+        background: -webkit-linear-gradient(0deg, #b3b3ff, #e5fff9); /* For Safari 5.1 to 6.0 */
+        background: -o-linear-gradient(0deg, #b3b3ff, #e5fff9); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(0deg, #b3b3ff, #e5fff9); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(0deg, #b3b3ff, #e5fff9);
+        background-position:0px;
+  }
+  #box{
+    width: 93%;
+    height: 85% ;
+    border: 6px solid #333333;
+    border-radius:20px;
+    background-image: url("images/background.jpeg");
+    background-size: cover;
+    padding: 3%;
+    padding-bottom: 0%
+  }
+  
+  #ti{
+    width: 92%;
+    height: 5% ;
+    border: 2px solid #333333;
+    border-radius:20px;
+    padding: 2%;
+    margin:2%;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    letter-spacing:0.1em;
+    font-size: 180%;
+    text-align: center;
+    box-shadow: 10px 10px 10px #111;
+  }
+  #question{
+    width: 90%;
+    height: 70% ;
+    border-radius:20px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    margin:2% auto;
+    border: 6px solid grey;
+  }
+  #test_status{
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    padding-left: 4%;
+  }
+  #q {
+    width: 91%;
+    height: 50% ;
+    padding: 2%;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    letter-spacing:0.1em;
+    font-size: 150%;
+    line-height: 150%;
+    display: flex;
+    flex-direction: column;
+  }
+  #choice-box {
+    display: flex;
+    flex-direction: row;
+  }
+  #choice1 {
+    width:50%;
+    font-size: 150%;
+    text-align: center;
+  }
+  #choice2 { 
+    width:50%;
+    font-size: 150%;
+    text-align: center;
+  }
+  p { 
+    padding: 2%;
+    margin:1%;
+    font-family: "Adobe Caslon Pro", "Hoefler Text", Georgia, Garamond, Times, serif;
+    letter-spacing:0.1em;
+    font-size: 150%;
+  }
+  #control {
+    width: 91%;
+    height: 10% ;
+    /*border: 6px solid #333333;*/
+    /*border-radius:20px;*/
+    padding: 2%;
+    margin:1%;
+  }
+  #start {
+    background-color: #a3a3c2;
+    border: none;
+    color: white;
+    padding: 2%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 100%;
+    font-family: verdana;
+    border-radius: 20px;
+    width: 20%;
+    /*margin-left: 9% ;*/
+    margin-right: 3% ;
+    box-shadow: 2px 2px 2px 2px #52527a;
+  }
+  #nextq {
+    background-color: #a3a3c2;
+    border: none;
+    color: white;
+    padding: 2%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 100%;
+    font-family: verdana;
+    border-radius: 20px;
+    width: 20%;
+    margin-left: 9% ;
+    margin-right: 9% ;
+    box-shadow: 2px 2px 2px 2px #52527a;
+  }
+  #end {
+    background-color: #a3a3c2;
+    border: none;
+    color: white;
+    padding: 2%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 100%;
+    font-family: verdana;
+    border-radius: 20px;
+    width: 20%;
+    /*margin-left: 9% ;*/
+    margin-right: 3% ;
+    box-shadow: 2px 2px 2px 2px #52527a;
+  
+  }
+  #score{
+  width: 10%;
+  height: 20% ;
+  border-radius:20px;
+  padding: 2%;
+  margin:2%;
+  float: left;
+  text-align: center;
+  font-size: 100%;
+  font-family: verdana;
+  }
+  #watch{
+    width: 90%;
+    height: 20% ;
+    /*border: 6px solid #333333;*/
+    border-radius:20px;
+    padding: 2%;
+    margin:2%;
+    text-align: center;
+    font-size: 100%;
+    font-family: verdana;
+  }
+  #myProgress {
+    position: relative;
+    width: 0%;
+    height: 30px;
+    background-color: #ddd;
+  }
+  
+  #myBar {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background-color: #4CAF50;
+  }
+  #footer{
+  clear:both;
+  text-align: center;
+  padding: 2%;
+  }
+  

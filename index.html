@@ -1,178 +1,202 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Demo</title>
-    <style>
-        .people_counter {
-          text-align:center;
-        }
-    </style>
-  </head>
-  <body>
-    <div style="width:100%; text-align:center;">
-      <canvas id="draw" height="500" width="1000" style="border: 1px solid #111111; margin: auto"/>
+
+<head>
+  <meta charset="UTF-8">
+  <link type="text/css" rel="stylesheet" href="style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+  <title>Quiz</title>
+  <style>
+    .people_counter {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="ti"> Interactive Quiz </div>
+    <div id="watch"> </div>
+    <div id=question>
+      <div id="myProgress">
+        <div id="myBar"></div>
+      </div>
+      <div id="q">You have 20s to answer each question</div>
+      <div id="choice-box"></div>
+      <div id="control">
+        <!--<button id="start" onclick='onstart()'>Start</button> !-->
+        <!--<button id="nextq" onclick='checkAnswer()'>Next</button> !-->
+        <!--<button id="end" onclick='showscore()'>Quit</button> !-->
+      </div>
     </div>
-    <div class="person_side"></div>
-    <div class="hand_raised"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-          frames.start();
-      });
+  <div style="width:100%; text-align:center;">
+    <canvas id="draw" height="500" width="1000" style="border: 1px solid #111111; margin: auto" />
+  </div>
+  <div class="person_side"></div>
+  <div class="hand_raised"></div>
 
-      var frames = {
-        socket: null,
 
-        start: function() {
-          var ip = window.location.search;
-          ip = ip.split('ip=')[1];
-          console.log(`connecting to ${ip}`);
-          // websocket connection location
-          // add to server ?ip=172.29.41.16:8888
-          var url = "ws://" + ip + "/frames";
+<script type="text/javascript">
+  $(document).ready(function () {
+    frames.start();
+  });
 
-          // canvas object
-          var c = document.getElementById("draw");
-          var ctx = c.getContext("2d");
-          // all real-world units are in mm unless denoted by CM
-          var personRadiusCM = 30;
-          // origin (x,y)
-          var origin = [c.width/2, 0]; //[500, 0]
-          // subscribe to the /frames data
-          frames.socket = new WebSocket(url);
-          frames.socket.onmessage = function(event) {
-            let data = JSON.parse(event.data);
-            // clear the canvas
-            ctx.clearRect(0, 0, c.width, c.height);
+  var frames = {
+    socket: null,
 
-            // draw the camera on the top of the screen
-            drawEnv(c, ctx, origin);
-            var start_flag = 0;
-            var i = 0;
-            if (data.people) {
-              // var num_people = Object.keys(data.people).length;
-              // $('.people_counter').text(`I see ${num_people} people`);
-              var closest_person = data.people[getClosestPerson(data)];
-              // draw closest person -- for some reason wrappign this in a separate function isn't working :(
-              ctx.strokeStyle = ctx.fillStyle = colors[i++];
-		      ctx.beginPath();
-		      let person_x = -1 * toCM(closest_person.avg_position[0]) + origin[0]
-		      let person_y = toCM(closest_person.avg_position[2]) + origin[1]
-		      ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
-		      ctx.stroke();
-		      // check for raised hand
-		      if (isHandRaised(closest_person)==1 && start_flag==0) {
-		      	//their hand is raised
-		      	console.log('START GAME')
-		      	start_flag = 1;
-		      	$('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
-		      }
-		      if (start_flag==1) {
-		      	var side = getSide(closest_person, origin) //'left' or 'right'
-		      	console.log(side)
-		      	$('.person_side').text(`You are on the ${side} side.`);
-		      }
-            }
+    start: function () {
+      var ip = window.location.search;
+      ip = ip.split('ip=')[1];
+      console.log(`connecting to ${ip}`);
+      // websocket connection location
+      // add to server ?ip=172.29.41.16:8888
+      var url = "ws://" + ip + "/frames";
+
+      // canvas object
+      var c = document.getElementById("draw");
+      var ctx = c.getContext("2d");
+      // all real-world units are in mm unless denoted by CM
+      var personRadiusCM = 30;
+      // origin (x,y)
+      var origin = [c.width / 2, 0]; //[500, 0]
+      // subscribe to the /frames data
+      frames.socket = new WebSocket(url);
+      var start_flag = 0;
+      frames.socket.onmessage = function (event) {
+        let data = JSON.parse(event.data);
+        // clear the canvas
+        ctx.clearRect(0, 0, c.width, c.height);
+
+        // draw the camera on the top of the screen
+        drawEnv(c, ctx, origin);
+        var i = 0;
+        if (data.people) {
+          // var num_people = Object.keys(data.people).length;
+          // $('.people_counter').text(`I see ${num_people} people`);
+          var closest_person = data.people[getClosestPerson(data)];
+          // draw closest person -- for some reason wrappign this in a separate function isn't working :(
+          ctx.strokeStyle = ctx.fillStyle = colors[i++];
+          ctx.beginPath();
+          let person_x = -1 * toCM(closest_person.avg_position[0]) + origin[0]
+          let person_y = toCM(closest_person.avg_position[2]) + origin[1]
+          ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
+          ctx.stroke();
+          // check for raised hand
+          if (isHandRaised(closest_person) == 1 && start_flag == 0) {
+            //their hand is raised
+            console.log('START GAME')
+            onstart();
+            start_flag = 1;
+            $('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
+          }
+          if (start_flag == 1) {
+            var side = getSide(closest_person, origin) //'left' or 'right'
+            console.log(side)
+            $('.person_side').text(`You are on the ${side} side.`);
           }
         }
-      };
-
-
-      // Helper Functions
-
-      // Convert MM to CM
-      function toCM(mm) {
-        return mm/10;
       }
+    }
+  };
 
-      // Draw an arrow
-      // from: https://stackoverflow.com/questions/808826/draw-arrow-on-canvas-tag#answer-6333775
-      function canvas_arrow(context, fromx, fromy, tox, toy) {
-        var headlen = 10; // length of head in pixels
-        var dx = tox - fromx;
-        var dy = toy - fromy;
-        var angle = Math.atan2(dy, dx);
-        context.moveTo(fromx, fromy);
-        context.lineTo(tox, toy);
-        context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-        context.moveTo(tox, toy);
-        context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+
+  // Helper Functions
+
+  // Convert MM to CM
+  function toCM(mm) {
+    return mm / 10;
+  }
+
+  // Draw an arrow
+  // from: https://stackoverflow.com/questions/808826/draw-arrow-on-canvas-tag#answer-6333775
+  function canvas_arrow(context, fromx, fromy, tox, toy) {
+    var headlen = 10; // length of head in pixels
+    var dx = tox - fromx;
+    var dy = toy - fromy;
+    var angle = Math.atan2(dy, dx);
+    context.moveTo(fromx, fromy);
+    context.lineTo(tox, toy);
+    context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+    context.moveTo(tox, toy);
+    context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+  }
+
+  // Setup an array of colors
+  var tc = tinycolor({
+    r: Math.floor(Math.random() * 0xFF),
+    g: Math.floor(Math.random() * 0xFF),
+    b: Math.floor(Math.random() * 0xFF)
+  });
+  colors = [];
+  var parts = 2 + Math.floor(Math.random() * 5);
+  for (var i = 0; i < parts; i++) {
+    tc = tc.spin(360 / parts);
+    colors.push('#' + tc.toHex());
+  }
+
+  // Draw the environment
+  function drawEnv(c, ctx, origin) {
+    var cameraSizeCM = [15, 5];
+    ctx.beginPath()
+    ctx.strokeStyle = ctx.fillStyle = 'aqua';
+    ctx.moveTo(origin[0], origin[1])
+    ctx.lineTo(origin[0], c.height)
+    ctx.stroke()
+    // ctx.fillRect(origin[0], origin[1]-cameraSizeCM[1]/2, cameraSizeCM[0], cameraSizeCM[1])
+
+    // ctx.font = "25px Arial";
+    // ctx.fillText("x", 90, 20);
+    // ctx.fillText("y", 8, 100);
+    // ctx.beginPath();
+    // canvas_arrow(ctx, 14, 14, 14, 80);
+    // canvas_arrow(ctx, 14, 14, 80, 14);
+    // ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.strokeStyle = ctx.fillStyle = '#0000FF';
+    // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2, 20);
+    // ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.strokeStyle = ctx.fillStyle = '#FF0000';
+    // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2-20, 1.5);
+    // ctx.stroke();
+  }
+
+  // get closest person (single player of our game) in terms of z (depth)
+  function getClosestPerson(data) {
+    var closest_idx = -1;
+    var closest_dist = 10000;
+    for (const [idx, person] of Object.entries(data.people)) {
+      if (person.avg_position[2] < closest_dist) {
+        closest_dist = person.avg_position[2]
+        closest_idx = person.idx
       }
+    }
+    return closest_idx
+  }
 
-      // Setup an array of colors
-      var tc = tinycolor({
-        r: Math.floor(Math.random() * 0xFF),
-        g: Math.floor(Math.random() * 0xFF),
-        b: Math.floor(Math.random() * 0xFF)
-      });
-      colors = [];
-      var parts = 2 + Math.floor(Math.random() * 5);
-      for (var i = 0; i < parts; i++) {
-        tc = tc.spin(360 / parts);
-        colors.push('#' + tc.toHex());
-      }
+  // if one wrist is at least 250 mm above the eyes, return 1
+  function isHandRaised(closest_person) {
+    //sometimes this value is undefined because the body part was not detected properly, but that's ok
+    if (closest_person.keypoints.LWrist[1] > closest_person.keypoints.LEye[1] + 250 || closest_person.keypoints.RWrist[1] > closest_person.keypoints.REye[1] + 250) {
+      return 1
+    }
+    return 0
+  }
 
-      // Draw the environment
-      function drawEnv(c, ctx, origin) {
-        var cameraSizeCM = [15, 5];
-        ctx.beginPath()
-        ctx.strokeStyle = ctx.fillStyle = 'aqua';
-        ctx.moveTo(origin[0], origin[1])
-        ctx.lineTo(origin[0], c.height)
-        ctx.stroke()
-        // ctx.fillRect(origin[0], origin[1]-cameraSizeCM[1]/2, cameraSizeCM[0], cameraSizeCM[1])
+  // if person is on left or right side -- note that it takes a second to update the side since it's looping over everyone
+  function getSide(closest_person, origin) {
+    if (closest_person.avg_position[0] > origin[0]) {
+      return 'left'
+    }
+    return 'right'
+  }
 
-        // ctx.font = "25px Arial";
-        // ctx.fillText("x", 90, 20);
-        // ctx.fillText("y", 8, 100);
-        // ctx.beginPath();
-        // canvas_arrow(ctx, 14, 14, 14, 80);
-        // canvas_arrow(ctx, 14, 14, 80, 14);
-        // ctx.stroke();
+</script>
+</body>
 
-        // ctx.beginPath();
-        // ctx.strokeStyle = ctx.fillStyle = '#0000FF';
-        // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2, 20);
-        // ctx.stroke();
-
-        // ctx.beginPath();
-        // ctx.strokeStyle = ctx.fillStyle = '#FF0000';
-        // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2-20, 1.5);
-        // ctx.stroke();
-      }
-
-      // get closest person (single player of our game) in terms of z (depth)
-      function getClosestPerson(data) {
-      	var closest_idx = -1;
-        var closest_dist = 10000;
-        for (const [idx, person] of Object.entries(data.people)) {
-           	if (person.avg_position[2]<closest_dist) {
-            	closest_dist = person.avg_position[2] 
-            	closest_idx = person.idx
-            }
-        }
-        return closest_idx
-      }
-
-      // if one wrist is at least 250 mm above the eyes, return 1
-      function isHandRaised(closest_person) {
-      	//sometimes this value is undefined because the body part was not detected properly, but that's ok
-      	if (closest_person.keypoints.LWrist[1]>closest_person.keypoints.LEye[1]+250 || closest_person.keypoints.RWrist[1]>closest_person.keypoints.REye[1]+250) {
-      		return 1
-      	}
-      	return 0
-      }
-
-      // if person is on left or right side -- note that it takes a second to update the side since it's looping over everyone
-      function getSide(closest_person, origin) {
-      	if (closest_person.avg_position[0] > origin[0]) {
-      		return 'left'
-      	}
-      	return 'right'
-      }
-
-    </script>
-  </body>
 </html>
