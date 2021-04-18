@@ -13,7 +13,8 @@
     <div style="width:100%; text-align:center;">
       <canvas id="draw" height="500" width="1000" style="border: 1px solid #111111; margin: auto"/>
     </div>
-    <div class="people_counter"></div>
+    <div class="person_side"></div>
+    <div class="hand_raised"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -29,6 +30,7 @@
           ip = ip.split('ip=')[1];
           console.log(`connecting to ${ip}`);
           // websocket connection location
+          // add to server ?ip=172.29.41.16:8888
           var url = "ws://" + ip + "/frames";
 
           // canvas object
@@ -37,8 +39,7 @@
           // all real-world units are in mm unless denoted by CM
           var personRadiusCM = 30;
           // origin (x,y)
-          var origin = [c.width/2, 0];
-
+          var origin = [c.width/2, 0]; //[500, 0]
           // subscribe to the /frames data
           frames.socket = new WebSocket(url);
           frames.socket.onmessage = function(event) {
@@ -47,36 +48,32 @@
             ctx.clearRect(0, 0, c.width, c.height);
 
             // draw the camera on the top of the screen
-            drawEnv(ctx, origin);
-
-            // draw each person as a circle
+            drawEnv(c, ctx, origin);
+            var start_flag = 0;
             var i = 0;
             if (data.people) {
-              var num_people = Object.keys(data.people).length;
-              $('.people_counter').text(`I see ${num_people} people`);
-              //console.log(num_people);
-              for (const [idx, person] of Object.entries(data.people)) {
-                // we want the data on the x,z plane from the camera's frame, so use indicies and 0 (x), 2 (Z)
-                // see: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#arcs
-                // function definition is: arc(x, y, radius, startAngle, endAngle, counterclockwise)
-                ctx.strokeStyle = ctx.fillStyle = colors[i++];
-                ctx.beginPath();
-                let person_x = -1 * toCM(person.avg_position[0]) + origin[0]
-                let person_y = toCM(person.avg_position[2]) + origin[1]
-                ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
-                ctx.stroke();
-                // draw an arrow for the person, if we have detected an angle
-                if (person.theta) {
-                  ctx.beginPath();
-                  let th = person.theta;
-                  let arrow_x = person_x + Math.cos(th) * personRadiusCM;
-                  let arrow_y = person_y - Math.sin(th) * personRadiusCM;
-                  //console.log(arrow_x);
-                  //console.log(arrow_y);
-                  canvas_arrow(ctx, person_x, person_y, arrow_x, arrow_y);
-                  ctx.stroke();
-                }
-              }
+              // var num_people = Object.keys(data.people).length;
+              // $('.people_counter').text(`I see ${num_people} people`);
+              var closest_person = data.people[getClosestPerson(data)];
+              // draw closest person -- for some reason wrappign this in a separate function isn't working :(
+              ctx.strokeStyle = ctx.fillStyle = colors[i++];
+		      ctx.beginPath();
+		      let person_x = -1 * toCM(closest_person.avg_position[0]) + origin[0]
+		      let person_y = toCM(closest_person.avg_position[2]) + origin[1]
+		      ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
+		      ctx.stroke();
+		      // check for raised hand
+		      if (isHandRaised(closest_person)==1 && start_flag==0) {
+		      	//their hand is raised
+		      	console.log('START GAME')
+		      	start_flag = 1;
+		      	$('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
+		      }
+		      if (start_flag==1) {
+		      	var side = getSide(closest_person, origin) //'left' or 'right'
+		      	console.log(side)
+		      	$('.person_side').text(`You are on the ${side} side.`);
+		      }
             }
           }
         }
@@ -118,29 +115,62 @@
       }
 
       // Draw the environment
-      function drawEnv(ctx, origin) {
+      function drawEnv(c, ctx, origin) {
         var cameraSizeCM = [15, 5];
+        ctx.beginPath()
+        ctx.strokeStyle = ctx.fillStyle = 'aqua';
+        ctx.moveTo(origin[0], origin[1])
+        ctx.lineTo(origin[0], c.height)
+        ctx.stroke()
+        // ctx.fillRect(origin[0], origin[1]-cameraSizeCM[1]/2, cameraSizeCM[0], cameraSizeCM[1])
 
-        ctx.strokeStyle = ctx.fillStyle = '#333333';
-        ctx.fillRect(origin[0], origin[1]-cameraSizeCM[1]/2, cameraSizeCM[0], cameraSizeCM[1])
+        // ctx.font = "25px Arial";
+        // ctx.fillText("x", 90, 20);
+        // ctx.fillText("y", 8, 100);
+        // ctx.beginPath();
+        // canvas_arrow(ctx, 14, 14, 14, 80);
+        // canvas_arrow(ctx, 14, 14, 80, 14);
+        // ctx.stroke();
 
-        ctx.font = "25px Arial";
-        ctx.fillText("x", 90, 20);
-        ctx.fillText("y", 8, 100);
-        ctx.beginPath();
-        canvas_arrow(ctx, 14, 14, 14, 80);
-        canvas_arrow(ctx, 14, 14, 80, 14);
-        ctx.stroke();
+        // ctx.beginPath();
+        // ctx.strokeStyle = ctx.fillStyle = '#0000FF';
+        // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2, 20);
+        // ctx.stroke();
 
-        ctx.beginPath();
-        ctx.strokeStyle = ctx.fillStyle = '#0000FF';
-        canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2, 20);
-        ctx.stroke();
+        // ctx.beginPath();
+        // ctx.strokeStyle = ctx.fillStyle = '#FF0000';
+        // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2-20, 1.5);
+        // ctx.stroke();
+      }
 
-        ctx.beginPath();
-        ctx.strokeStyle = ctx.fillStyle = '#FF0000';
-        canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2-20, 1.5);
-        ctx.stroke();
+      // get closest person (single player of our game) in terms of z (depth)
+      function getClosestPerson(data) {
+      	var closest_idx = -1;
+        var closest_dist = 10000;
+        for (const [idx, person] of Object.entries(data.people)) {
+           	if (person.avg_position[2]<closest_dist) {
+            	closest_dist = person.avg_position[2] 
+            	closest_idx = person.idx
+            }
+        }
+        return closest_idx
+      }
+
+      // if one wrist is at least 250 mm above the eyes, return 1
+      function isHandRaised(closest_person) {
+      	//sometimes this value is undefined because the body part was not detected properly, but that's ok
+      	if (closest_person.keypoints.LWrist[1]>closest_person.keypoints.LEye[1]+250 || closest_person.keypoints.RWrist[1]>closest_person.keypoints.REye[1]+250) {
+      		return 1
+      	}
+      	return 0
+      }
+
+      // if person is on left or right side -- note that it takes a second to update the side since it's looping over everyone
+      function getSide(closest_person, origin) {
+      	if (closest_person.avg_position[0] > origin[0]) {
+      		return 'left'
+      	}
+      	return 'right'
       }
 
     </script>
