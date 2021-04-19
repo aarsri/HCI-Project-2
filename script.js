@@ -24,6 +24,7 @@ function askques() {
 		countDownClear();
 		start_flag = 0;
 		console.log(start_flag)
+		location.reload();
 		return; //end the game
 	}
 	numAnswered++;
