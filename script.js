@@ -19,10 +19,13 @@ function generateRandomNum() {
 	}
 	seenQuestions.add(ran); //add the next question's index
 }
+function endGame() {
+	let end_content = document.getElementById("end");
+	end_content.innerHTML="<h3> Thanks for playing! </h3>";
+}
 function askques() {
 	if (numAnswered == questionsPerGame) {
 		countDownClear();
-		start_flag = 0;
 		console.log(start_flag)
 		location.reload();
 		return; //end the game
