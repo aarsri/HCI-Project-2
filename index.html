@@ -76,25 +76,25 @@
           // var num_people = Object.keys(data.people).length;
           // $('.people_counter').text(`I see ${num_people} people`);
           var closest_person = data.people[getClosestPerson(data)];
-          // draw closest person -- for some reason wrappign this in a separate function isn't working :(
-          ctx.strokeStyle = ctx.fillStyle = colors[i++];
-          ctx.beginPath();
-          let person_x = -1 * toCM(closest_person.avg_position[0]) + origin[0]
-          let person_y = toCM(closest_person.avg_position[2]) + origin[1]
-          ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
-          ctx.stroke();
-          // check for raised hand
-          console.log(start_flag)
-          if (isHandRaised(closest_person) == 1 && start_flag == 0) {
-            //their hand is raised
-            console.log('START GAME')
-            onstart();
-            start_flag = 1;
-            $('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
-          }
-          if (start_flag == 1) {
-            var side = getSide(closest_person, origin) //'left' or 'right'
-            $('.person_side').text(`You are on the ${side} side.`);
+          if (closest_person) {
+            ctx.strokeStyle = ctx.fillStyle = colors[i++];
+            ctx.beginPath();
+            let person_x = -1 * toCM(closest_person.avg_position[0]) + origin[0]
+            let person_y = toCM(closest_person.avg_position[2]) + origin[1]
+            ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
+            ctx.stroke();
+            // check for raised hand
+            if (isHandRaised(closest_person) == 1 && start_flag == 0) {
+              //their hand is raised
+              console.log('START GAME')
+              onstart();
+              start_flag = 1;
+              $('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
+            }
+            if (start_flag == 1) {
+              var side = getSide(closest_person, origin) //'left' or 'right'
+              $('.person_side').text(`You are on the ${side} side.`);
+            }
           }
         }
       }
@@ -146,14 +146,26 @@
     ctx.stroke()
   }
 
+  // check if person is directly in front of tv
+  function isInFront(x) {
+    if (x<850 && x>-850) {
+      return 1
+    }
+    else {
+      return 0
+    }
+  }
+
   // get closest person (single player of our game) in terms of z (depth)
   function getClosestPerson(data) {
     var closest_idx = -1;
     var closest_dist = 10000;
     for (const [idx, person] of Object.entries(data.people)) {
-      if (person.avg_position[2] < closest_dist) {
-        closest_dist = person.avg_position[2]
-        closest_idx = person.idx
+      if (isInFront(person.avg_position[0])) {
+        if (person.avg_position[2] < closest_dist) {
+          closest_dist = person.avg_position[2]
+          closest_idx = person.idx
+        }
       }
     }
     return closest_idx
