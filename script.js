@@ -22,6 +22,8 @@ function generateRandomNum() {
 function askques() {
 	if (numAnswered == questionsPerGame) {
 		countDownClear();
+		start_flag = 0;
+		console.log(start_flag)
 		return; //end the game
 	}
 	numAnswered++;

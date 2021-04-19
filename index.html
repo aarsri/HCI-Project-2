@@ -69,7 +69,6 @@
         let data = JSON.parse(event.data);
         // clear the canvas
         ctx.clearRect(0, 0, c.width, c.height);
-
         // draw the camera on the top of the screen
         drawEnv(c, ctx, origin);
         var i = 0;
@@ -85,6 +84,7 @@
           ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
           ctx.stroke();
           // check for raised hand
+          console.log(start_flag)
           if (isHandRaised(closest_person) == 1 && start_flag == 0) {
             //their hand is raised
             console.log('START GAME')
@@ -94,7 +94,6 @@
           }
           if (start_flag == 1) {
             var side = getSide(closest_person, origin) //'left' or 'right'
-            console.log(side)
             $('.person_side').text(`You are on the ${side} side.`);
           }
         }
@@ -141,29 +140,10 @@
   function drawEnv(c, ctx, origin) {
     var cameraSizeCM = [15, 5];
     ctx.beginPath()
-    ctx.strokeStyle = ctx.fillStyle = 'aqua';
+    ctx.strokeStyle = ctx.fillStyle = 'black';
     ctx.moveTo(origin[0], origin[1])
     ctx.lineTo(origin[0], c.height)
     ctx.stroke()
-    // ctx.fillRect(origin[0], origin[1]-cameraSizeCM[1]/2, cameraSizeCM[0], cameraSizeCM[1])
-
-    // ctx.font = "25px Arial";
-    // ctx.fillText("x", 90, 20);
-    // ctx.fillText("y", 8, 100);
-    // ctx.beginPath();
-    // canvas_arrow(ctx, 14, 14, 14, 80);
-    // canvas_arrow(ctx, 14, 14, 80, 14);
-    // ctx.stroke();
-
-    // ctx.beginPath();
-    // ctx.strokeStyle = ctx.fillStyle = '#0000FF';
-    // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2, 20);
-    // ctx.stroke();
-
-    // ctx.beginPath();
-    // ctx.strokeStyle = ctx.fillStyle = '#FF0000';
-    // canvas_arrow(ctx, origin[0]+cameraSizeCM[0]/2, 1.5, origin[0]+cameraSizeCM[0]/2-20, 1.5);
-    // ctx.stroke();
   }
 
   // get closest person (single player of our game) in terms of z (depth)
@@ -182,10 +162,12 @@
   // if one wrist is at least 250 mm above the eyes, return 1
   function isHandRaised(closest_person) {
     //sometimes this value is undefined because the body part was not detected properly, but that's ok
-    if (closest_person.keypoints.LWrist[1] > closest_person.keypoints.LEye[1] + 250 || closest_person.keypoints.RWrist[1] > closest_person.keypoints.REye[1] + 250) {
+    if (closest_person.keypoints.LWrist[1] < closest_person.keypoints.LEye[1] - 150 || closest_person.keypoints.RWrist[1] < closest_person.keypoints.REye[1] - 150) {
       return 1
     }
-    return 0
+    else {
+      return 0
+    }
   }
 
   // if person is on left or right side -- note that it takes a second to update the side since it's looping over everyone
