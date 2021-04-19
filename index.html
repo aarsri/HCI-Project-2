@@ -33,7 +33,7 @@
       </div>
     </div>
   <div style="width:100%; text-align:center;">
-    <canvas id="draw" height="500" width="1000" style="border: 1px solid #111111; margin: auto" />
+    <canvas id="draw" style="border: 1px solid #111111; margin: auto" />
   </div>
   <div class="person_side"></div>
   <div class="hand_raised"></div>
@@ -57,6 +57,11 @@
 
       // canvas object
       var c = document.getElementById("draw");
+      //set canvas size dynamically
+      var w = window.innerWidth|| document.documentElement.clientWidth|| document.body.clientWidth;
+      var h = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
+      c.setAttribute("width", w * .9);
+      c.setAttribute("height", h / 2);
       var ctx = c.getContext("2d");
       // all real-world units are in mm unless denoted by CM
       var personRadiusCM = 30;
