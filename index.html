@@ -19,12 +19,13 @@
 
 <body>
   <div id="ti"> Interactive Quiz </div>
+  <div id="end"></div>
     <div id="watch"> </div>
     <div id=question>
       <div id="myProgress">
         <div id="myBar"></div>
       </div>
-      <div id="q">You have 20s to answer each question</div>
+      <div id="q">Raise your hand to start the trivia game!You have 20 seconds to answer each question. </div>
       <div id="choice-box"></div>
       <div id="control">
         <!--<button id="start" onclick='onstart()'>Start</button> !-->
@@ -91,9 +92,9 @@
             // check for raised hand
             if (isHandRaised(closest_person) == 1 && start_flag == 0) {
               //their hand is raised
-              console.log('START GAME')
-              onstart();
+              console.log('START GAME');
               start_flag = 1;
+              onstart();
               $('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
             }
             if (start_flag == 1) {

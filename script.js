@@ -21,13 +21,14 @@ function generateRandomNum() {
 }
 function endGame() {
 	let end_content = document.getElementById("end");
-	end_content.innerHTML="<h3> Thanks for playing! </h3>";
+	end_content.innerHTML="<h3> Thanks for playing! The quiz will restart in 10 seconds. </h3>";
 }
 function askques() {
 	if (numAnswered == questionsPerGame) {
 		countDownClear();
-		console.log(start_flag)
-		location.reload();
+		//console.log(start_flag)
+		endGame();
+		setTimeout(function(){ location.reload(); }, 10000); // wait 10 seconds for quiz to restart
 		return; //end the game
 	}
 	numAnswered++;

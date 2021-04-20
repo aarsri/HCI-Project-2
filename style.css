@@ -117,32 +117,20 @@ body {
     box-shadow: 2px 2px 2px 2px #52527a;
   }
   #end {
-    background-color: #a3a3c2;
-    border: none;
-    color: white;
+    color: black;
     padding: 2%;
+    margin: 2% ;
+  }
+  #score {
+    width: 10%;
+    height: 20% ;
+    border-radius:20px;
+    padding: 2%;
+    margin:2%;
+    float: left;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 100%;
     font-family: verdana;
-    border-radius: 20px;
-    width: 20%;
-    /*margin-left: 9% ;*/
-    margin-right: 3% ;
-    box-shadow: 2px 2px 2px 2px #52527a;
-  
-  }
-  #score{
-  width: 10%;
-  height: 20% ;
-  border-radius:20px;
-  padding: 2%;
-  margin:2%;
-  float: left;
-  text-align: center;
-  font-size: 100%;
-  font-family: verdana;
   }
   #watch{
     width: 90%;
@@ -161,7 +149,6 @@ body {
     height: 30px;
     background-color: #ddd;
   }
-  
   #myBar {
     position: absolute;
     width: 0%;
