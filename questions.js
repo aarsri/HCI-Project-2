@@ -1,3 +1,14 @@
+/*
+
+TO-DO:
+  Google Sheets to JSON
+  
+  Questions are added from a simple Google Forms submission to this question bank.
+  
+  See Form:
+
+*/
+
 var questions = [
   {
     question: "Ada Lovelace is credited with being the first person to have made what?",
