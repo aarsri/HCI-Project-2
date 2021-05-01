@@ -97,6 +97,7 @@
         var ip = window.location.search;
         ip = ip.split('ip=')[1];
         console.log(`connecting to ${ip}`);
+        
         // websocket connection location
         // add to server ?ip=172.29.41.16:8888
         var url = "ws://" + ip + "/twod";
