@@ -10,9 +10,8 @@ var correct = ""; // change this later pls
 function onstart() {
   count = 0;
   width = 0;
-
   $("._color").css("opacity", "1");
-
+  $("#draw").css("z-index", "10");
   $("#myProgress").css("width", "100%"); //set progress bar with to 100%
   $("#watch").css("display", "block");
   //  document.getElementById("watch").style.visibility = "visible";
