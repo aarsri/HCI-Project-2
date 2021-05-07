@@ -12,7 +12,7 @@ body {
   justify-content: center;
   display: flex;
   background-color: #1a1a1c;
-  color: #fff;
+  color: #010645;
   overflow-y: hidden;
 }
 
@@ -28,7 +28,7 @@ body {
   box-shadow: 0 0 30px #1450c1;
   box-sizing: border-box;
   overflow: hidden;
-  background: linear-gradient(343deg, #34a3f4 15%, rgba(96, 81, 233, 0.697) 100%);
+  background: linear-gradient(343deg, #34a3f4 15%, rgba(167, 206, 250, 0.697) 100%);
 }
 #game_wrapper ._effect {
   position: absolute;
@@ -114,7 +114,7 @@ body {
   text-shadow: 0 0 30px #fff;
 }
 #q h1._title, #end h1._title {
-  color: #69e5d7;
+  color: #010645;
   animation: pulse 4s infinite;
   border: 0;
   margin: 2%;
@@ -158,7 +158,7 @@ p {
 #start {
   background-color: #a3a3c2;
   border: none;
-  color: white;
+  color: #010645;
   padding: 2%;
   text-align: center;
   text-decoration: none;
@@ -186,7 +186,7 @@ canvas {
 #nextq {
   background-color: #a3a3c2;
   border: none;
-  color: white;
+  color: #010645;
   padding: 2%;
   text-align: center;
   text-decoration: none;

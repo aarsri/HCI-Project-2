@@ -23,8 +23,8 @@
     <!-- STYLING -->
 
     <div class="_effect" style="background-image:url(./images/scanline.png);opacity: 0.2;"></div>
-    <div class="_effect" style="background-image:url(./images/film.jpeg);mix-blend-mode: overlay;opacity: 1;"></div>
-    <div class="_effect" style="background-image:url(./images/noise.gif);mix-blend-mode: overlay;opacity: 0.6;"></div>
+    <!--<div class="_effect" style="background-image:url(./images/film.jpeg);mix-blend-mode: overlay;opacity: 1;"></div>
+    <div class="_effect" style="background-image:url(./images/noise.gif);mix-blend-mode: overlay;opacity: 0.6;"></div>-->
 
     <!-- GAME -->
 
@@ -74,8 +74,6 @@
         
       </div>
     </div>
-    <div class="person_side"></div>
-    <div class="hand_raised"></div>
   </div>
   <canvas id="draw"/>
   <!-- SCRIPTS -->
@@ -86,17 +84,18 @@
     $(document).ready(function() {
       frames.start();
     });
-
+    let host = "172.28.142.145:8888";
     var frames = {
       socket: null,
 
       start: function() {
-        var ip = window.location.search;
-        ip = ip.split('ip=')[1];
-        console.log(`connecting to ${ip}`);
+        // var ip = window.location.search;
+        // ip = ip.split('ip=')[1];
+        console.log(`connecting to ${host}`);
         // websocket connection location
         // add to server ?ip=172.29.41.16:8888
-        var url = "ws://" + ip + "/frames";
+        let url = "ws://" + host + "/frames";
+        frames.socket = new WebSocket(url);
 
         // canvas object
         var c = document.getElementById("draw");
