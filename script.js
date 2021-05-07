@@ -32,11 +32,11 @@ function generateRandomNum() {
 
 
 function endGame() {
-
+  $("#draw").css("z-index", "-9"); //hde the canvas
   $("#q").fadeOut("slow");
   $("#question").fadeOut("slow");
   $("#end").fadeIn("5000").css("display", "flex");
-
+  $("#watch").css("display", "none");
 }
 
 function askques() {
@@ -47,7 +47,7 @@ function askques() {
     endGame();
     setTimeout(function () {
       location.reload();
-    }, 10000); // wait 10 seconds for quiz to restart
+    }, 30000); // wait 30 seconds for quiz to restart
     return; //end the game
   }
 
@@ -122,9 +122,6 @@ function checkAnswer() { //runs everytime the timer expires
 
 function countDownStart() {
   count = 3; //number of seconds per each question
-
-
-
   countDownNow();
 }
 

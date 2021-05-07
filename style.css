@@ -1,4 +1,13 @@
 @import url("https://use.typekit.net/vws3qcu.css");
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 0;
+  overflow: hidden; /*  Disable scrollbars */
+  display: block;  /* No floating content on sides */
+}
+
 body {
   justify-content: center;
   display: flex;
@@ -19,7 +28,7 @@ body {
   box-shadow: 0 0 30px #1450c1;
   box-sizing: border-box;
   overflow: hidden;
-  background: linear-gradient(343deg, #34a3f4 15%, rgba(70, 57, 193, 0.9012048193) 100%);
+  background: linear-gradient(343deg, #34a3f4 15%, rgba(96, 81, 233, 0.697) 100%);
 }
 #game_wrapper ._effect {
   position: absolute;
@@ -86,8 +95,8 @@ body {
   left: 0;
   top: 0;
   box-sizing: border-box;
-  padding: 2.5em;
-  font-size: 2.6em;
+  padding: 2.5vw;
+  font-size: 4vw;
   line-height: 110%;
   display: flex;
   flex-direction: column;
@@ -97,37 +106,44 @@ body {
 }
 #q h1,
 #end h1 {
-  font-size: 2em;
+  font-size: 7vw;
+  padding: 2vw;
 }
 #q h3,
 #end h3 {
   text-shadow: 0 0 30px #fff;
 }
-#q h1._title,
-#end h1._title {
+#q h1._title, #end h1._title {
+  color: #69e5d7;
+  animation: pulse 4s infinite;
+  border: 0;
+  margin: 2%;
+}
+
+/*#end h1._title {
   animation: pulse 4s infinite, title 4s infinite;
   text-shadow: 0 0 30px #20b7a5;
   border: 0;
-}
+}*/
 #q ._icon img,
 #end ._icon img {
   max-width: 90px;
-  margin: 0 auto;
+  margin: 6vw auto 0 auto;
   padding: 0.25em;
   animation: pulse 1s infinite;
 }
 #q ._subtext,
 #end ._subtext {
-  font-size: 0.75em;
+  font-size: 3vw;
   font-weight: 500;
-  margin: 0 auto;
+  margin: 4vw auto;
   line-height: 100%;
 }
 
 #end {
   height: 100%;
   padding: 0;
-  justify-content: center;
+  justify-content: start;
   vertical-align: center;
   display: none;
 }
@@ -160,10 +176,9 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
-  border: 1px solid cyan;
   z-index: -9;
-  width: 100%;
-  height: 100vh;
+  /*width: 100%;
+  height: 100vh;*/
   overflow: hidden;
   pointer-events: none;
 }
@@ -203,7 +218,7 @@ canvas {
   padding: 2%;
   margin: 2%;
   text-align: center;
-  font-size: 100%;
+  font-size: 3em;
   font-family: bilo, sans-serif;
 }
 
@@ -227,7 +242,7 @@ canvas {
 }
 ._color div {
   width: auto;
-  flex-basis: 49%;
+  flex-basis: 49.5%;
   height: 100vh;
 }
 ._color ._left {
@@ -251,7 +266,7 @@ canvas {
 }
 #choice-box ._choice {
   width: 50%;
-  font-size: 2em;
+  font-size: 3vw;
   text-align: center;
 }
 

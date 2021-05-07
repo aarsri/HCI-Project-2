@@ -22,17 +22,18 @@
 
     <!-- STYLING -->
 
-    <div class="_effect" style="background-image:url(images/scanline.png);opacity: 0.2;"></div>
-    <div class="_effect" style="background-image:url(images/film.jpeg);mix-blend-mode: overlay;opacity: 1;"></div>
-    <div class="_effect" style="background-image:url(images/noise.gif);mix-blend-mode: overlay;opacity: 0.6;"></div>
+    <div class="_effect" style="background-image:url(./images/scanline.png);opacity: 0.2;"></div>
+    <div class="_effect" style="background-image:url(./images/film.jpeg);mix-blend-mode: overlay;opacity: 1;"></div>
+    <div class="_effect" style="background-image:url(./images/noise.gif);mix-blend-mode: overlay;opacity: 0.6;"></div>
 
     <!-- GAME -->
 
     <div id="end">
       <h1 class="_title">Thanks for playing!</h1>
-
       <span class="_subtext">
-        <strong>A new game will begin soon...</strong>
+        <div><strong>Thanks for playing! Scan this QR code with your phone to submit your own questions to the game!</strong></div>
+        <img style="width: 40%; height:40%; margin:2vw;" src="./images/qr.svg"/>
+        <div><strong id="new-countdown">A new game will begin shortly!</strong></div>
       </span>
     </div>
 
@@ -58,13 +59,15 @@
       <div id="game">
 
         <div id="q">
-          <h1 class="_title">Trivia</h1>
+          <h1 class="_title">Trivia in Transit</h1>
           <div class="_icon">
-            <img src="images/hand.png">
+            <img src="./images/hand.png">
           </div>
           <span class="_subtext">
-            <strong>Raise your right hand for 3 seconds to start the game.<br></strong>
-            You have 20 seconds to answer questions about anything under the sun, curated by the Yale community.
+            You have 15 seconds to answer questions about anything under the sun, curated by the Yale community. 
+            Once you start, you'll see a circle on the screen representing your location. 
+            Move to the side of the screen that matches the answer you want to choose! 
+            <div style="margin:1vw;"><strong>Raise your right hand for 3 seconds to start the game.</strong></div>
           </span>
         </div>
 
@@ -74,7 +77,7 @@
     <div class="person_side"></div>
     <div class="hand_raised"></div>
   </div>
-  <canvas id="draw" />
+  <canvas id="draw"/>
   <!-- SCRIPTS -->
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -100,8 +103,8 @@
         //set canvas size dynamically
         var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        c.setAttribute("width", w * .9);
-        c.setAttribute("height", h / 2);
+        c.setAttribute("width", w );
+        c.setAttribute("height", h);
         var ctx = c.getContext("2d");
         // all real-world units are in mm unless denoted by CM
         var personRadiusCM = 30;
@@ -118,15 +121,14 @@
           drawEnv(c, ctx, origin);
           var i = 0;
           if (data.people) {
-            // var num_people = Object.keys(data.people).length;
-            // $('.people_counter').text(`I see ${num_people} people`);
             var closest_person = data.people[getClosestPerson(data)];
             if (closest_person) {
-              ctx.strokeStyle = ctx.fillStyle = colors[i++];
+              ctx.strokeStyle = ctx.fillStyle = '#FFFFFF';
               ctx.beginPath();
               let person_x = -1 * toCM(closest_person.avg_position[0]) + origin[0]
               let person_y = toCM(closest_person.avg_position[2]) + origin[1]
               ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
+              ctx.lineWidth = 10; //make the circle thick
               ctx.stroke();
               // check for raised hand
               if (isHandRaised(closest_person) == 1 && start_flag == 0) {
@@ -153,42 +155,16 @@
     function toCM(mm) {
       return mm / 10;
     }
-
-    // Draw an arrow
-    // from: https://stackoverflow.com/questions/808826/draw-arrow-on-canvas-tag#answer-6333775
-    function canvas_arrow(context, fromx, fromy, tox, toy) {
-      var headlen = 10; // length of head in pixels
-      var dx = tox - fromx;
-      var dy = toy - fromy;
-      var angle = Math.atan2(dy, dx);
-      context.moveTo(fromx, fromy);
-      context.lineTo(tox, toy);
-      context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-      context.moveTo(tox, toy);
-      context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-    }
-
-    // Setup an array of colors
-    var tc = tinycolor({
-      r: Math.floor(Math.random() * 0xFF),
-      g: Math.floor(Math.random() * 0xFF),
-      b: Math.floor(Math.random() * 0xFF)
-    });
-    colors = [];
-    var parts = 2 + Math.floor(Math.random() * 5);
-    for (var i = 0; i < parts; i++) {
-      tc = tc.spin(360 / parts);
-      colors.push('#' + tc.toHex());
-    }
-
+    
     // Draw the environment
     function drawEnv(c, ctx, origin) {
       var cameraSizeCM = [15, 5];
       ctx.beginPath()
       ctx.strokeStyle = ctx.fillStyle = 'black';
-      ctx.moveTo(origin[0], origin[1])
-      ctx.lineTo(origin[0], c.height)
-      ctx.stroke()
+      //ctx.moveTo(origin[0], origin[1])
+      //ctx.lineTo(origin[0], c.height)
+      //ctx.lineWidth = 10;
+      //ctx.stroke()
     }
 
     // check if person is directly in front of tv
