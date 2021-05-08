@@ -50,9 +50,6 @@ function askques() {
     }, 30000); // wait 30 seconds for quiz to restart
     return; //end the game
   }
-
-
-
   numAnswered++;
   move();
   countDownStart();
@@ -111,23 +108,23 @@ function checkAnswer() { //runs everytime the timer expires
 
   //  $("._color div:not(:contains('" + correct + "'))").addClass("wrong");
   $("._color div[data-status='right']").addClass("right");
+  $("._color div[data-status='right']").addClass("correct-status");
   $("._color div[data-status='wrong']").addClass("wrong");
   setTimeout(function () {
-
-    countDownClear(); //move on to next question
+    countDownClear(); //move on to next question in 5 seconds
     askques();
-  }, 3000);
+  }, 5000);
 
 }
 
 function countDownStart() {
-  count = 3; //number of seconds per each question
+  count = 15; //number of seconds per each question
   countDownNow();
 }
 
 function countDownNow() {
   --count;
-  $("#watch").html("<h4> Remaining Time: " + count + " <h4> ");
+  $("#watch").html("<h4> remaining time: " + count + " <h4> ");
   if (count > 0) {
     ctimer = setTimeout(countDownNow, 1000);
   }
@@ -143,6 +140,7 @@ function countDownClear() {
 
   // im sorry
   $("._color div[data-status='wrong']").removeClass("wrong");
+  $("._color div[data-status='right']").addClass("correct-status");
   $("._color div[data-status='right']").removeClass("right");
 
   clearTimeout(ctimer);
