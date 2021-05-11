@@ -7,14 +7,18 @@ var numAnswered = 0;
 var questionsPerGame = 5;
 var correct = ""; // change this later pls
 
+// START GAME
 function onstart() {
   count = 0;
   width = 0;
+  
+  $("#myProgress").fadeIn("slow");
+  $("#qnumber").fadeIn("slow");
+  $("._questionnumber").text("0");
   $("._color").css("opacity", "1");
   $("#draw").css("z-index", "10");
-  $("#myProgress").css("width", "100%"); //set progress bar with to 100%
   $("#watch").css("display", "block");
-  //  document.getElementById("watch").style.visibility = "visible";
+  
   askques();
 }
 
@@ -31,6 +35,8 @@ function generateRandomNum() {
 }
 
 
+// END GAME
+
 function endGame() {
   $("#draw").css("z-index", "-9"); //hde the canvas
   $("#q").fadeOut("slow");
@@ -41,6 +47,13 @@ function endGame() {
 }
 
 function askques() {
+  
+  // Ask a new question
+  
+  // reset width
+  $("#myBar").css("width", "0");
+  width = 0;
+  
 
   if (numAnswered == questionsPerGame) {
     countDownClear();
@@ -56,10 +69,9 @@ function askques() {
   countDownStart();
   generateRandomNum(); //pick the next random question index
   let ques = questions[ran].question;
-  console.log("questions");
+
   q.innerHTML = "<h3>" + ques + "</h3>";
   showChoice();
-
 }
 
 
@@ -121,19 +133,28 @@ function checkAnswer() { //runs everytime the timer expires
 }
 
 function countDownStart() {
-  count = 15; //number of seconds per each question
+  //number of seconds per each question
+  
+  totalCount = 15;
+  count = 15; 
   countDownNow();
 }
 
 function countDownNow() {
   --count;
-  $("#watch").html("<h4> remaining time: " + count + " <h4> ");
+  
+  $("#watch").html("<h4> Remaining Time: " + count + " <h4> ");
+  
   if (count > 0) {
+    width += (100 / totalCount);
+    $("#myBar").css("width", width + "%");
     ctimer = setTimeout(countDownNow, 1000);
   }
 
   if (count == 0) {
-    /*If you have not answered a question in the given time frame , move to next question */
+    width += (100 / totalCount);
+    $("#myBar").css("width", width + "%");
+    // If you have not answered a question in the given time frame , move to next question
     checkAnswer()
   }
 }
@@ -151,10 +172,13 @@ function countDownClear() {
 }
 
 
+// Increment new progress bar above question
 function move() { //increments progress bar by 20% each time since there are 5 quesitons
-  var elem = document.getElementById("myBar");
-  width = width + (100 / questionsPerGame);
-  elem.style.width = width + '%';
+  $("._questionnumber").text(parseInt($("._questionnumber").text()) + 1);
+//  
+//  var elem = document.getElementById("myBar");
+//  width = width + (100 / questionsPerGame);
+//  elem.style.width = width + '%';
 }
 
 // adapted from https://github.com/gbhumika/Online-quiz

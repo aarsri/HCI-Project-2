@@ -89,7 +89,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 2% auto;
+  margin: 5% auto;
   font-weight: 700;
   color: #fff;
   pointer-events: none;
@@ -110,6 +110,20 @@ body {
   display: flex;
   justify-content: center;
   overflow: hidden;
+}
+
+#qnumber{
+  position: absolute;
+  top: 10px;
+  color:#fff;
+  font-family: bilo;
+  font-size: 1.5em;
+  display: none;
+  
+  ._questionnumber{
+    display: inline;
+  }
+  
 }
 
 #q,
@@ -238,7 +252,7 @@ canvas {
 
 #watch {
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   width: 90%;
   height: 10%;
   padding: 2%;
@@ -300,18 +314,28 @@ canvas {
 
 #myProgress {
   position: absolute;
-  bottom: 0;
-  width: 0%;
-  height: 30px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 95%;
+  padding: 1em;
+  border-radius:50px;
+  height: 20px;
   background-color: #ffffff;
   z-index: 99999;
+  display: none;
 }
 
 #myBar {
-  position: absolute;
+  position: relative;
+  overflow: hidden;
+  top: -10px;
+  left: -5px;
   width: 0%;
-  height: 100%;
-  background-color: #69e5d7;
+  height: 200%;
+  border-radius:50px;
+  background-color: #ff2dff;
 }
 
 #footer {
