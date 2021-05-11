@@ -61,7 +61,7 @@ function askques() {
     endGame();
     setTimeout(function () {
       location.reload();
-    }, 30000); // wait 30 seconds for quiz to restart
+    }, 10000); // wait 30 seconds for quiz to restart
     return; //end the game
   }
   numAnswered++;
@@ -152,6 +152,7 @@ function countDownNow() {
   }
 
   if (count == 0) {
+    $("#watch").html("<h4>Time's Up!</h4>");
     width += (100 / totalCount);
     $("#myBar").css("width", width + "%");
     // If you have not answered a question in the given time frame , move to next question
