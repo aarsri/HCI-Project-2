@@ -1,0 +1,1 @@
+* Please do not delete the .SCSS file. It's a SASS file used for styling.

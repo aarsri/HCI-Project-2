@@ -34,6 +34,7 @@ function generateRandomNum() {
 function endGame() {
   $("#draw").css("z-index", "-9"); //hde the canvas
   $("#q").fadeOut("slow");
+  $("#myProgress").fadeOut("slow");
   $("#question").fadeOut("slow");
   $("#end").fadeIn("5000").css("display", "flex");
   $("#watch").css("display", "none");
@@ -89,7 +90,9 @@ function showChoice() {
     $("._right").attr('data-status', 'wrong');
     choicebox.innerHTML += "<div id='choice1' class='_choice' data-status='right'> " + leftAns + "</div>";
     choicebox.innerHTML += "<div id='choice2' class='_choice' data-status='wrong'> " + rightAns + "</div>";
+    
   } else {
+    
     $("._right").attr('data-status', 'right');
     $("._left").attr('data-status', 'wrong');
     choicebox.innerHTML += "<div id='choice1' class='_choice' data-status='wrong'> " + leftAns + "</div>";
@@ -136,6 +139,7 @@ function countDownNow() {
 }
 
 function countDownClear() {
+  
   /* This function clears the timer for every function */
 
   // im sorry
