@@ -288,10 +288,10 @@ canvas {
   height: 100vh;
 }
 ._color ._left {
-  border-right: 5px solid white;
+  border-right: 5px solid #ec04ff;
 }
 ._color ._right {
-  border-left: 5px solid white;
+  border-left: 5px solid #ec04ff;
 }
 ._color .wrong {
   background: red;
@@ -335,7 +335,7 @@ canvas {
   width: 0%;
   height: 200%;
   border-radius:50px;
-  background-color: #ff2dff;
+background: linear-gradient(83deg, rgba(147,12,255,1) 0%, rgba(255,45,255,1) 100%);
 }
 
 #footer {
