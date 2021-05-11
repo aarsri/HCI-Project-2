@@ -61,7 +61,7 @@ function askques() {
     endGame();
     setTimeout(function () {
       location.reload();
-    }, 10000); // wait 30 seconds for quiz to restart
+    }, 20000); // wait 20 seconds for quiz to restart
     return; //end the game
   }
   numAnswered++;
