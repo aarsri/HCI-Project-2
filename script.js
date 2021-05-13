@@ -5,7 +5,7 @@ const seenQuestions = new Set();
 var totalNumQs = questions.length;
 var numAnswered = 0;
 var questionsPerGame = 5;
-var correct = ""; // change this later pls
+var correct = ""; 
 
 // START GAME
 function onstart() {
@@ -22,9 +22,7 @@ function onstart() {
   askques();
 }
 
-function _(x) {
-  return document.getElementById(x);
-}
+
 
 function generateRandomNum() {
   ran = Math.floor((Math.random() * totalNumQs)); //generate a random number 
@@ -38,7 +36,7 @@ function generateRandomNum() {
 // END GAME
 
 function endGame() {
-  $("#draw").css("z-index", "-9"); //hde the canvas
+  $("#draw").css("z-index", "-9"); //hide the canvas after the game ends
   $("#q").fadeOut("slow");
   $("#myProgress").fadeOut("slow");
   $("#question").fadeOut("slow");
@@ -47,17 +45,12 @@ function endGame() {
 }
 
 function askques() {
-  
   // Ask a new question
-  
   // reset width
   $("#myBar").css("width", "0");
   width = 0;
-  
-
   if (numAnswered == questionsPerGame) {
     countDownClear();
-    //console.log(start_flag)
     endGame();
     setTimeout(function () {
       location.reload();
@@ -76,7 +69,7 @@ function askques() {
 
 
 function showChoice() {
-  let choicebox = _("choice-box");
+  let choicebox = document.getElementById("choice-box");
   choicebox.innerHTML = ""; //clear previous answers
   let randomOrder = Math.random();
   let leftAns;
@@ -89,41 +82,25 @@ function showChoice() {
     leftAns = questions[ran].choices[1];
     rightAns = questions[ran].choices[0];
   }
-
-
-  console.log("Correct: " + questions[ran].correctChoice);
-
   // save correct choice to correct
   correct = questions[ran].correctChoice;
-
-
   if (leftAns == correct) {
     $("._left").attr('data-status', 'right');
     $("._right").attr('data-status', 'wrong');
     choicebox.innerHTML += "<div id='choice1' class='_choice' data-status='right'> " + leftAns + "</div>";
     choicebox.innerHTML += "<div id='choice2' class='_choice' data-status='wrong'> " + rightAns + "</div>";
-    
   } else {
-    
     $("._right").attr('data-status', 'right');
     $("._left").attr('data-status', 'wrong');
     choicebox.innerHTML += "<div id='choice1' class='_choice' data-status='wrong'> " + leftAns + "</div>";
     choicebox.innerHTML += "<div id='choice2' class='_choice' data-status='right'> " + rightAns + "</div>";
   }
-
-
 }
 
 
 function checkAnswer() { //runs everytime the timer expires 
   choice = document.getElementsByName("choices");
-  //TODO: HERE we would replace with code to indicate which side was correct
-
-  // CHANGE LATER: color div with the correct choice -- this is still broken ish
-
-  //  $("._color div:not(:contains('" + correct + "'))").addClass("wrong");
   $("._color div[data-status='right']").addClass("right");
-  $("._color div[data-status='right']").addClass("correct-status");
   $("._color div[data-status='wrong']").addClass("wrong");
   setTimeout(function () {
     countDownClear(); //move on to next question in 5 seconds
@@ -134,9 +111,8 @@ function checkAnswer() { //runs everytime the timer expires
 
 function countDownStart() {
   //number of seconds per each question
-  
-  totalCount = 15;
-  count = 15; 
+  totalCount = 10;
+  count = 10; 
   countDownNow();
 }
 
@@ -161,25 +137,16 @@ function countDownNow() {
 }
 
 function countDownClear() {
-  
-  /* This function clears the timer for every function */
-
-  // im sorry
+  /* This function clears the timer and removes red/green effect */
   $("._color div[data-status='wrong']").removeClass("wrong");
-  $("._color div[data-status='right']").addClass("correct-status");
   $("._color div[data-status='right']").removeClass("right");
-
   clearTimeout(ctimer);
 }
 
 
 // Increment new progress bar above question
-function move() { //increments progress bar by 20% each time since there are 5 quesitons
+function move() { //increments question number
   $("._questionnumber").text(parseInt($("._questionnumber").text()) + 1);
-//  
-//  var elem = document.getElementById("myBar");
-//  width = width + (100 / questionsPerGame);
-//  elem.style.width = width + '%';
 }
 
-// adapted from https://github.com/gbhumika/Online-quiz
+// code for timer and filling in questions adapted from https://github.com/gbhumika/Online-quiz

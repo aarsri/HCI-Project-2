@@ -94,11 +94,7 @@
       socket: null,
 
       start: function() {
-        // var ip = window.location.search;
-        // ip = ip.split('ip=')[1];
         console.log(`connecting to ${host}`);
-        // websocket connection location
-        // add to server ?ip=172.29.41.16:8888
         let url = "ws://" + host + "/frames";
         frames.socket = new WebSocket(url);
 
@@ -124,9 +120,6 @@
           // draw the camera on the top of the screen
           drawEnv(c, ctx, origin);
           var i = 0;
-          /*console.log('status');
-          if (getSide(closest_person, origin))
-          $(".correct-status").html("Correct!");*/
           if (data.people) {
             var closest_person = data.people[getClosestPerson(data)];
             if (closest_person) {
@@ -137,20 +130,13 @@
               ctx.arc(person_x, person_y, personRadiusCM, 0, 2 * Math.PI);
               ctx.lineWidth = 10; //make the circle thick
               ctx.stroke();
-              // check for raised hand
-
-
-              
               if (isHandRaised(closest_person) == 1 && start_flag == 0) {
                 //their hand is raised
-                console.log('START GAME');
                 start_flag = 1;
-                onstart();
-                $('.hand_raised').text(`Is your hand raised? ${isHandRaised(closest_person)}`);
+                onstart(); 
               }
               if (start_flag == 1) {
-                var side = getSide(closest_person, origin) //'left' or 'right'
-                $('.person_side').text(`You are on the ${side} side.`);
+                var side = getSide(closest_person, origin) //'left' or 'right
               }
             }
           }
@@ -171,10 +157,6 @@
       var cameraSizeCM = [15, 5];
       ctx.beginPath()
       ctx.strokeStyle = ctx.fillStyle = 'black';
-      //ctx.moveTo(origin[0], origin[1])
-      //ctx.lineTo(origin[0], c.height)
-      //ctx.lineWidth = 10;
-      //ctx.stroke()
     }
 
     // check if person is directly in front of tv
