@@ -186,8 +186,24 @@ var questions = [
     correctChoice: "Codex Leicester"
   },
   {
-    question: "When was the Yale Daily News foundedd?",
+    question: "When was the Yale Daily News founded?",
     choices: ["1878", "1876"],
     correctChoice: "1878"
+  },
+  {
+    question: "Which of these rocks will float in water?",
+    choices: ["limestone", "pumice"],
+    correctChoice: "pumice"
+  },
+  {
+    question: "Who co-founded Microsoft with Bill Gates?",
+    choices: ["Steve Wozniak", "Paul Allen"],
+    correctChoice: "Paul Allen"
+  },
+  {
+    question: "Who is the star of the movie 'Casablanca'?",
+    choices: ["Cary Grant", "Humphrey Bogart"],
+    correctChoice: "Humphrey Bogart"
   }
+
 ]
